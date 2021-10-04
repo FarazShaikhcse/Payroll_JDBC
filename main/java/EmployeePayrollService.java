@@ -61,4 +61,29 @@ public class EmployeePayrollService {
 		}
 
 	}
+	
+	/**
+	 * this method updates a column data in the database table
+	 * @return
+	 * @throws EmployeePayrollException
+	 */
+	public boolean updateData() throws EmployeePayrollException {
+		Connection connection;
+		try {
+			connection = connectDatabase();
+			Statement statement = connection.createStatement();
+			int result = statement.executeUpdate("update employee_payroll set salary=300000 where name='Terisa'");
+			if (result > 0) {
+				System.out.println("updated salary of the employee");
+				return true;
+			}
+		} catch (ClassNotFoundException e) {
+			throw new EmployeePayrollException("class not found");
+		} catch (SQLException e) {
+			throw new EmployeePayrollException("sql exception");
+		}
+
+		return false;
+
+	}
 }
