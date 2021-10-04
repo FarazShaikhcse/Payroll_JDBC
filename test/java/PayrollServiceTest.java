@@ -79,4 +79,11 @@ public class PayrollServiceTest {
 		Assert.assertTrue(result);
 
 	}
+	@Test
+	public void givenEmployeePayrollDatabase_ShouldReturnEmployeeDetailsUsingBasedOndate()
+			throws EmployeePayrollException, ClassNotFoundException, SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.retrieveDate();
+
+	}
 }
