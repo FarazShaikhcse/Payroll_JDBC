@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,8 +9,6 @@ import java.util.Enumeration;
 import com.mysql.cj.jdbc.Driver;
 
 public class EmployeePayrollService {
-
-
 
 	public Connection connectDatabase() throws ClassNotFoundException, SQLException {
 
@@ -61,9 +60,10 @@ public class EmployeePayrollService {
 		}
 
 	}
-	
+
 	/**
 	 * this method updates a column data in the database table
+	 * 
 	 * @return
 	 * @throws EmployeePayrollException
 	 */
@@ -72,7 +72,7 @@ public class EmployeePayrollService {
 		try {
 			connection = connectDatabase();
 			Statement statement = connection.createStatement();
-			int result = statement.executeUpdate("update employee_payroll set salary=300000 where name='Terisa'");
+			int result = statement.executeUpdate("update employee_payroll set basic_pay=300000 where name='Terisa'");
 			if (result > 0) {
 				System.out.println("updated salary of the employee");
 				return true;
@@ -86,4 +86,42 @@ public class EmployeePayrollService {
 		return false;
 
 	}
+
+	public boolean updateSalaryPrepared() throws EmployeePayrollException {
+
+		Connection connection;
+		try {
+			connection = connectDatabase();
+			Statement statement = connection.createStatement();
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("update employee_payroll set basic_pay=? where name=?");
+			preparedStatement.setDouble(1, 300000);
+			preparedStatement.setString(2, "Tersia");
+			return true;
+		} catch (ClassNotFoundException e) {
+			throw new EmployeePayrollException("class not found");
+		} catch (SQLException e) {
+			throw new EmployeePayrollException("sql exception");
+		}
+
+	}
+	public boolean retrievePrepared(String name) throws EmployeePayrollException {
+		Connection connection;
+
+		try {
+			connection = connectDatabase();
+			Statement statement = connection.createStatement();
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("select * from employee_payroll where name=?");
+			preparedStatement.setString(1, name);
+			return true;
+		} catch (ClassNotFoundException e) {
+			throw new EmployeePayrollException("class not found");
+		} catch (SQLException e) {
+			throw new EmployeePayrollException("sql exception");
+		}
+
+
+	}
+	
 }
